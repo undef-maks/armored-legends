@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["vite/client", "node"],
+    "skipLibCheck": true,
+
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["../shared/*"],
+
+      "@core/*": ["src/core/*"],
+      "@game/*": ["src/game/*"],
+      "@network/*": ["src/network/*"],
+      "@ui/*": ["src/ui/*"],
+      "@types/*": ["src/types/*"],
+      "@bootstrap/*": ["src/bootstrap/*"]
+    },
+
+    /* 🔒 STRICT */
+    "strict": true,
+
+    /* 🔧 Керовані флаги */
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+
+    /* 🧩 Реалістично для ігор */
+    "noImplicitThis": false,
+    "useUnknownInCatchVariables": false,
+
+    /* 🧹 Чистота коду */
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+
+    /* 🛠️ DX */
+    "exactOptionalPropertyTypes": false
+  },
+  "include": ["src", "../shared"]
+}
+
