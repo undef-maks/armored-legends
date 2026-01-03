@@ -73,7 +73,7 @@ export abstract class Tank extends GameObject implements ITank {
     if (this.input.verDirection) {
       const speed = 7;
 
-      const forward = new CANNON.Vec3(0, 0, 1);
+      const forward = new CANNON.Vec3(0, 0, this.input.verDirection);
 
       body.quaternion.vmult(forward, forward);
 

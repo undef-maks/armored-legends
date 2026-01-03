@@ -21,7 +21,7 @@ export class PhysicsManager implements IPhysicsManager {
       shape: new Plane(),
       type: Body.STATIC
     });
-    this.world.defaultContactMaterial.friction = 0.05;
+    this.world.defaultContactMaterial.friction = 0;
 
     groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
     this.world.addBody(groundBody);
