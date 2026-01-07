@@ -2,7 +2,7 @@ import { TankComponentCategory } from "@shared/types/tank/components/types";
 import { TankComponent } from "../components/component";
 import { AssetManager } from "@core/asset-manager";
 import { TracksComponent } from "../components/tracks/tracks.component";
-import { TransformNode } from "@babylonjs/core";
+import { ShadowGenerator, TransformNode } from "@babylonjs/core";
 
 const MODEL_FOLDERS: Record<TankComponentCategory, string> = {
   "body": "components/bodies",
@@ -11,7 +11,7 @@ const MODEL_FOLDERS: Record<TankComponentCategory, string> = {
 };
 
 export class SetComponentModel {
-  constructor(private modelName: string) { }
+  constructor(private modelName: string, private shadowGenerator: ShadowGenerator) { }
 
   async execute(component: TankComponent) {
     const assetManager = AssetManager.getInstance();
@@ -20,6 +20,8 @@ export class SetComponentModel {
     try {
       const model = await assetManager.loadModel(this.modelName + ".glb", src);
       component.onModelLoad(model);
+
+      this.shadowGenerator.addShadowCaster(model.getChildMeshes()[0]);
 
       component.isLoaded = true;
     } catch (err) {

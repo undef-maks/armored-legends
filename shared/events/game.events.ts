@@ -7,5 +7,6 @@ export interface GameUpdateResponse {
 
 export interface MoveInput {
   verDirection: number,
-  horDirection: number
+  horDirection: number,
+  angle: number
 }

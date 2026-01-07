@@ -8,13 +8,14 @@ export interface ITankWeaponComponent extends ITankComponent {
   damage: number;
   fireRate: number;
   range: number;
+  angle: number;
 
   getNetworkState: (full: boolean) => WeaponComponentFullNetworkState | WeaponComponentNetworkState;
 }
 
 export type WeaponComponentFullNetworkState = Pick<
   ITankWeaponComponent,
-  "id" | "type" | "category" | "damage" | "fireRate" | "range"
+  "id" | "type" | "category" | "damage" | "fireRate" | "range" | "angle"
 >;
 
 export type WeaponComponentNetworkState = Omit<

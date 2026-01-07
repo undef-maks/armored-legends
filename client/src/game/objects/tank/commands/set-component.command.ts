@@ -10,6 +10,7 @@ import { WeaponComponent } from "../components/weapons/weapon.component";
 import { FlameWeaponComponent, HeavyWeaponComponent, LightWeaponComponent, MediumWeaponComponent } from "../components/weapons";
 import { TankBodyComponent } from "../components/bodies/tank-body.component";
 import { SetComponentModel } from "./set-component-model";
+import { ShadowGenerator } from "@babylonjs/core";
 
 const TRACKS_FACTORY: Record<TracksComponentType, (id: string) => TracksComponent> = {
   "medium-tracks": (id: string) => new MediumTracksComponent(id),
@@ -29,7 +30,7 @@ const BODY_FACTORY: Record<BodyComponentType, (id: string) => TankBodyComponent>
 };
 
 export class SetComponentsCommand {
-  constructor(private components: TankComponentsNetworkStateFull | TankComponentsNetworkState) {
+  constructor(private components: TankComponentsNetworkStateFull | TankComponentsNetworkState, private shadowGenerator: ShadowGenerator) {
 
   }
 
@@ -40,14 +41,14 @@ export class SetComponentsCommand {
 
     if (!tank.components.body || tank.components.body.id !== body.id) {
       tank.components.body = BODY_FACTORY[body.type](body.id);
-      const setModel = new SetComponentModel(tank.components.body.modelName);
+      const setModel = new SetComponentModel(tank.components.body.modelName, this.shadowGenerator);
       await setModel.execute(tank.components.body);
       tank.components.body.setParent(tank.tankRoot);
     }
 
     if (!tank.components.tracks || tank.components.tracks.id !== tracks.id) {
       tank.components.tracks = TRACKS_FACTORY[tracks.type](tracks.id);
-      const setModel = new SetComponentModel(tank.components.tracks.modelName);
+      const setModel = new SetComponentModel(tank.components.tracks.modelName, this.shadowGenerator);
       await setModel.execute(tank.components.tracks);
 
       if (tank.components.body.rootNode)
@@ -62,7 +63,7 @@ export class SetComponentsCommand {
 
       tank.components.weapon = WEAPON_FACTORY[weapons.type](weapons.id);
 
-      const setModel = new SetComponentModel(tank.components.weapon.modelName);
+      const setModel = new SetComponentModel(tank.components.weapon.modelName, this.shadowGenerator);
       await setModel.execute(tank.components.weapon);
 
       if (tank.components.body.rootNode)

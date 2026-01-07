@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid";
 export class UserEventManager {
   private pressedKeys: Record<string, boolean> = {};
   private keyDownCallbacks: Record<string, (e: KeyboardEvent) => void> = {};
-  private keyUpCallbacks: Record<string, () => void> = {};
+  private keyUpCallbacks: Record<string, (e: KeyboardEvent) => void> = {};
 
   constructor(private htmlElement: HTMLElement) {
     this.htmlElement.onkeydown = (event) => this.canvasOnKeyDown(event);
@@ -16,7 +16,7 @@ export class UserEventManager {
     return id;
   }
 
-  public onKeyUp(callback: () => void): string {
+  public onKeyUp(callback: (e: KeyboardEvent) => void): string {
     const id = uuid();
     this.keyUpCallbacks[id] = callback;
     return id;
@@ -35,7 +35,6 @@ export class UserEventManager {
     const { key } = event;
     this.pressedKeys[key] = true;
 
-    console.log(this.pressedKeys)
     for (const cb of Object.values(this.keyDownCallbacks)) {
       cb(event);
     }
@@ -47,7 +46,7 @@ export class UserEventManager {
     this.pressedKeys[key] = false;
 
     for (const cb of Object.values(this.keyUpCallbacks)) {
-      cb();
+      cb(event);
     }
   }
 }

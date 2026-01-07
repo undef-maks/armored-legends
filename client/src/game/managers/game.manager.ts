@@ -13,10 +13,6 @@ import { NetworkManager } from "./network.manager";
 import { UserEventManager } from "./user-event.manager";
 
 class GameManager implements IGameManager {
-  objects: Record<string, GameObject> = {};
-  updaters: Record<string, ObjectUpdater> = {
-    tank: new TankUpdater()
-  };
   ownTank?: Tank;
 
   private objectManager: ObjectManager;
@@ -26,8 +22,9 @@ class GameManager implements IGameManager {
 
   constructor(private client: GameClient) {
     this.objectManager = new ObjectManager(this);
-    this.networkManager = new NetworkManager(this, client);
     this.sceneManager = new SceneManager();
+    this.networkManager = new NetworkManager(this, client, this.sceneManager);
+
     this.userEventManager = new UserEventManager(document.getElementById("renderCanvas") as HTMLCanvasElement);
 
     this.sceneManager.engine.runRenderLoop(() => {
@@ -39,6 +36,11 @@ class GameManager implements IGameManager {
     this.userEventManager.onKeyDown(e => {
       if (e.key == "q")
         client.sendWeaponChange();
+    })
+
+    this.userEventManager.onKeyUp(e => {
+      if (e.key == "Alt")
+        this.sceneManager.camera?.switchControl();
     })
   }
 
@@ -57,9 +59,13 @@ class GameManager implements IGameManager {
 
     const { isPressed } = this.userEventManager;
 
+    if (!this.sceneManager.camera) return;
+    const angle = Math.atan2(this.sceneManager.camera.dx, this.sceneManager.camera.dz);
+
     const moveInput: MoveInput = {
       horDirection: isPressed("a") ? 1 : isPressed("d") ? -1 : 0,
-      verDirection: isPressed("w") ? 1 : isPressed("s") ? -1 : 0
+      verDirection: isPressed("w") ? 1 : isPressed("s") ? -1 : 0,
+      angle: angle
     };
 
     this.client.sendMove(moveInput);

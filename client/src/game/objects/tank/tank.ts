@@ -64,6 +64,9 @@ export class Tank extends GameObject {
       this.components.weapon.update(dt);
   }
 
+  enableShadows(light: BABYLON.Light) {
+  }
+
   updateNetworkState(state: TankNetworkState | TankNetworkStateFull): void {
     if (this.netPos == null) {
       this.netPos = {
@@ -72,9 +75,13 @@ export class Tank extends GameObject {
       };
     }
 
+
+
     const { position, quaternion } = state;
 
     this.netPos.position.set(position.x, position.y, position.z);
     this.netPos.quaternion.set(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+
+    if (this.components.weapon) this.components.weapon.updateNetworkState(state.components.weapons);
   }
 }

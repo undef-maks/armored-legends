@@ -11,6 +11,7 @@ export abstract class TankComponent implements ITankComponent {
     readonly category: TankComponentCategory
   ) { }
 
+  abstract update(): any;
   abstract getStats(): any;
 }
 

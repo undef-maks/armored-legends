@@ -31,8 +31,8 @@ export abstract class Tank extends GameObject implements ITank {
     components: TankComponents) {
     const body = new Body({
       mass: 130,
-      shape: new Box(new Vec3(2, 0.5, 3)),
-      position: new Vec3(0, 20, 0),
+      shape: new Box(new Vec3(1.2, 0.3, 2)),
+      position: new Vec3(0, 40, 0),
       linearDamping: 0.5,
       angularDamping: 0.8,
     });
@@ -44,6 +44,14 @@ export abstract class Tank extends GameObject implements ITank {
   onMove(data: MoveInput) {
     this.input = data;
 
+    const euler = new CANNON.Vec3();
+    this.body.quaternion.toEuler(euler, "YZX");
+
+    const tankY = euler.y;
+    let relative = data.angle - tankY;
+    relative = Math.atan2(Math.sin(relative), Math.cos(relative));
+
+    this.components.weapon.targetAngle = relative;
   }
 
   setComponent(component: TankComponent) {
@@ -71,7 +79,7 @@ export abstract class Tank extends GameObject implements ITank {
     }
 
     if (this.input.verDirection) {
-      const speed = 7;
+      const speed = 10;
 
       const forward = new CANNON.Vec3(0, 0, this.input.verDirection);
 
@@ -86,6 +94,7 @@ export abstract class Tank extends GameObject implements ITank {
       body.angularVelocity.z = 0;
       body.angularVelocity.y = 0;
     }
+    this.components.weapon.update();
   }
 
   getNetworkState(full: boolean): TankNetworkState | TankNetworkStateFull {

@@ -1,9 +1,12 @@
 import { WeaponComponentType } from "@shared/types/tank/components/types";
 import { TankComponent } from "../tank-component";
 import { ITankWeaponComponent, WeaponComponentFullNetworkState, WeaponComponentNetworkState } from "@shared/types/tank/components/weapon-component";
+import { MoveInput } from "@shared/events/game.events";
 
 export class WeaponComponent extends TankComponent implements ITankWeaponComponent {
   category: "weapon";
+  angle: number = 0;
+  targetAngle: number = 0;
 
   constructor(
     readonly id: string,
@@ -15,6 +18,25 @@ export class WeaponComponent extends TankComponent implements ITankWeaponCompone
     super(id, type, "weapon");
   }
 
+  update() {
+    let diff = this.targetAngle - this.angle;
+
+    diff = Math.atan2(Math.sin(diff), Math.cos(diff));
+
+    const maxSpeed = 0.5;
+    const maxStep = maxSpeed * 60 / 1000;
+
+    if (Math.abs(diff) > maxStep) {
+      this.angle += Math.sign(diff) * maxStep;
+    } else {
+      this.angle = this.targetAngle;
+    }
+  }
+
+
+  onMove(data: MoveInput) {
+  }
+
   getNetworkState(full: boolean): WeaponComponentFullNetworkState | WeaponComponentNetworkState {
     const fullState: WeaponComponentFullNetworkState = {
       id: this.id,
@@ -22,7 +44,8 @@ export class WeaponComponent extends TankComponent implements ITankWeaponCompone
       category: this.category,
       range: this.range,
       damage: this.damage,
-      fireRate: this.fireRate
+      fireRate: this.fireRate,
+      angle: this.angle
     };
 
     if (full) return fullState;

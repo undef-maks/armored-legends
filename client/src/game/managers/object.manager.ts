@@ -1,3 +1,4 @@
+import { SmallStone } from "@game/objects/decorations/small-stone";
 import { GameObject } from "../objects/game-object";
 import GameManager from "./game.manager";
 import { IGameManager } from "./types/game-manager";

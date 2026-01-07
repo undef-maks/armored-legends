@@ -1,5 +1,6 @@
-import { Body, NaiveBroadphase, Plane, Vec3, World } from "cannon-es";
+import { Body, Heightfield, NaiveBroadphase, Plane, Vec3, World } from "cannon-es";
 import { GameObject } from "src/objects/game-object";
+import * as CANNON from "cannon-es"
 
 export interface IPhysicsManager {
   update(delta: number): void;
@@ -21,10 +22,13 @@ export class PhysicsManager implements IPhysicsManager {
       shape: new Plane(),
       type: Body.STATIC
     });
-    this.world.defaultContactMaterial.friction = 0;
+    this.world.defaultContactMaterial.friction = 0.001;
 
     groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
     this.world.addBody(groundBody);
+
+
+
   }
   add(object: GameObject) {
     this.objects[object.id] = object;
