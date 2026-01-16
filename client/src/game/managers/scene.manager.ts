@@ -6,10 +6,13 @@ import { AssetManager } from "../../core/asset-manager";
 import { Tank } from "@game/objects/tank/tank";
 import { SmallStone } from "@game/objects/decorations/small-stone";
 
-function getRandomInt(max: number) {
-  return Math.floor(Math.random() * max);
-}
 
+function getRandomInt(min: number, max: number) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  // The formula ensures min is possible, but max is not (e.g., 0 to 9)
+  return Math.floor(Math.random() * (max - min)) + min;
+}
 export class SceneManager implements ISceneManager {
   scenes: Record<string, Scene> = {};
   engine: Engine;
@@ -41,7 +44,7 @@ export class SceneManager implements ISceneManager {
     var light = new BABYLON.DirectionalLight('light1', new Vector3(-40, -4000, -10), scene);
 
     light.position = new BABYLON.Vector3(10000, 0, 1000);
-    light.intensity = 1.2;
+    light.intensity = 1.6;
 
     this.shadowGenerator = new BABYLON.ShadowGenerator(1024, light);
 
@@ -51,7 +54,7 @@ export class SceneManager implements ISceneManager {
 
   spawnDecorations() {
     for (let i = 0; i < 150; i++) {
-      const pos = new Vector3(getRandomInt(500), 0.1, getRandomInt(500));
+      const pos = new Vector3(getRandomInt(-500, 500), 0.1, getRandomInt(-500, 500));
       const s = new SmallStone(pos);
     }
   }

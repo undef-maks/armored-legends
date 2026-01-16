@@ -5,5 +5,5 @@ export abstract class GameObject {
   constructor(readonly id: string, readonly type: string) { }
 
   abstract update(dt: number): void;
-  abstract updateNetworkState<T extends GameObjectNetworkState>(state: T): void;
+  abstract updateNetworkState(state: GameObjectNetworkState): void;
 }

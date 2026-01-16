@@ -1,5 +1,5 @@
 import { io, Socket } from "socket.io-client";
-import { GameUpdateResponse, MoveInput } from "@shared/events/game.events";
+import { GameUpdateResponse, MoveInput, UseSpell } from "@shared/events/game.events";
 
 export class GameClient {
   private socket: Socket | null = null;
@@ -14,6 +14,10 @@ export class GameClient {
       if (this.update)
         this.update(data);
     });
+  }
+
+  public sendUseSpell(data: UseSpell) {
+    if (this.socket) this.socket.emit("use-spell", data);
   }
 
   public sendWeaponChange() {

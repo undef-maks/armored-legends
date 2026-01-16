@@ -11,9 +11,9 @@ export class TankUpdater extends ObjectUpdater {
     const tank = object as Tank;
     const tankData = data as TankNetworkStateFull | TankNetworkState;
 
-    if (data.components.updatedId !== tank.updatedComponentsId) {
+    if (tankData.components.updatedId !== tank.updatedComponentsId) {
       console.log(`Components update for ${tank.id}`);
-      new SetComponentsCommand(data.components, shadowGenerator).execute(tank);
+      new SetComponentsCommand(tankData.components, shadowGenerator).execute(tank);
     }
 
     const isLoaded = tank.components.body?.isLoaded && tank.components.weapon?.isLoaded && tank.components.tracks?.isLoaded;

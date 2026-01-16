@@ -22,12 +22,12 @@ export class Tank extends GameObject {
   updatedComponentsId: string = "";
   netPos: { position: BABYLON.Vector3, quaternion: BABYLON.Quaternion } | null = null;
 
-  constructor(readonly id: string, scene: BABYLON.Scene) {
+  constructor(readonly id: string, scene: BABYLON.Scene, public playerName: string) {
     super(id, "tank");
     this.tankRoot = new BABYLON.TransformNode(`tankRoot-${id}`, scene);
     this.tankRoot.position.set(0, 0, 0);
 
-    console.log(`Spawn tank ${id}`);
+    console.log(`Spawn tank ${id} name: ${playerName}`);
   }
 
   update(dt: number): void {
@@ -67,15 +67,13 @@ export class Tank extends GameObject {
   enableShadows(light: BABYLON.Light) {
   }
 
-  updateNetworkState(state: TankNetworkState | TankNetworkStateFull): void {
+  updateNetworkState(state: TankNetworkState): void {
     if (this.netPos == null) {
       this.netPos = {
         quaternion: new BABYLON.Quaternion(),
         position: new BABYLON.Vector3(),
       };
     }
-
-
 
     const { position, quaternion } = state;
 

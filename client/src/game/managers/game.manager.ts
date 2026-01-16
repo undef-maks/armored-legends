@@ -1,9 +1,5 @@
-import { GameObject } from "../objects/game-object";
 import { GameUpdateResponse, MoveInput } from "@shared/events/game.events";
 import { Tank } from "../objects/tank/tank";
-import { ObjectUpdater } from "./updaters/object-updater";
-import { TankUpdater } from "./updaters/tank-updater";
-import * as BABYLON from "@babylonjs/core";
 import { IGameManager } from "./types/game-manager";
 import { INetworkManager } from "./types/network-manager";
 import { ObjectManager } from "./object.manager";
@@ -36,6 +32,8 @@ class GameManager implements IGameManager {
     this.userEventManager.onKeyDown(e => {
       if (e.key == "q")
         client.sendWeaponChange();
+      if (e.key == "e")
+        client.sendUseSpell({ type: "shoot" });
     })
 
     this.userEventManager.onKeyUp(e => {
@@ -81,13 +79,6 @@ class GameManager implements IGameManager {
 
   updateNetworkState = (data: GameUpdateResponse) => {
     this.networkManager.updateState(data, this.objectManager);
-  }
-
-  public createObjectFromData(data: any, scene: BABYLON.Scene): GameObject | null {
-    switch (data.type) {
-      case "tank": return new Tank(data.id, scene);
-      default: return null;
-    }
   }
 }
 
