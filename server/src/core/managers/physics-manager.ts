@@ -1,6 +1,5 @@
-import { Body, Heightfield, NaiveBroadphase, Plane, Vec3, World } from "cannon-es";
+import { Body, NaiveBroadphase, Plane, World } from "cannon-es";
 import { GameObject } from "src/objects/game-object";
-import * as CANNON from "cannon-es"
 
 export interface IPhysicsManager {
   update(delta: number): void;
@@ -26,9 +25,6 @@ export class PhysicsManager implements IPhysicsManager {
 
     groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
     this.world.addBody(groundBody);
-
-
-
   }
   add(object: GameObject) {
     this.objects[object.id] = object;
@@ -44,7 +40,11 @@ export class PhysicsManager implements IPhysicsManager {
   }
 
   update(delta: number) {
-    this.world.step(1 / 60);
+    const timeStep = 1 / 60;
+    const maxSubSteps = 10; // Дозволяємо рушію зробити до 10 мікро-кроків, якщо треба
+    const deltaTime = 0.016;
+    // У вашому ігровому циклі (requestAnimationFrame):
+    this.world.step(timeStep, deltaTime, maxSubSteps);
     for (const obj of this.getAll()) {
       obj.update();
     }

@@ -28,9 +28,10 @@ export abstract class Tank extends GameObject implements ITank {
     readonly playerId: string,
     public x: number,
     public y: number,
-    components: TankComponents) {
+    components: TankComponents,
+    public playerName: string) {
     const body = new Body({
-      mass: 130,
+      mass: 230,
       shape: new Box(new Vec3(1.2, 0.3, 2)),
       position: new Vec3(0, 40, 0),
       linearDamping: 0.5,
@@ -87,7 +88,6 @@ export abstract class Tank extends GameObject implements ITank {
 
       body.velocity.x = forward.x * speed;
       body.velocity.z = forward.z * speed;
-
       body.velocity.y = body.velocity.y;
 
       body.angularVelocity.x = 0;
@@ -101,6 +101,7 @@ export abstract class Tank extends GameObject implements ITank {
     const { position, quaternion } = this.body;
     return {
       id: this.id,
+      playerName: this.playerName,
       type: "tank",
       playerId: this.playerId,
       position: position,

@@ -1,6 +1,6 @@
 import { Socket } from "socket.io";
 import { Controller, ControllerMethod, IGameController, Message } from "./controller";
-import { GameUpdateResponse, MoveInput } from "@shared/events/game.events";
+import { GameUpdateResponse, MoveInput, UseSpell } from "@shared/events/game.events";
 import { GameService } from "../services/game.service";
 
 export class GameController extends Controller {
@@ -10,7 +10,8 @@ export class GameController extends Controller {
     super();
     this.methods = {
       "move": this.onMove,
-      "weapon-change": this.onWeaponChange
+      "weapon-change": this.onWeaponChange,
+      "use-spell": this.onUseSpell
     };
   }
 
@@ -18,8 +19,11 @@ export class GameController extends Controller {
     this.gameService.handlePlayerJoin(socket);
   }
 
+  private onUseSpell = (socket: Socket, data: UseSpell) => {
+    this.gameService.useSpell(socket.data.player, data);
+  }
+
   private onWeaponChange = (socket: Socket, data: null) => {
-    console.log("YEAH")
     this.gameService.changeWeapon(socket.data.player);
   }
 

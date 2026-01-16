@@ -14,5 +14,4 @@ export interface IAuthService extends IService {
 
 export interface IGameService extends IService {
   getPlayerSocket: (playerId: string) => Socket | null;
-  spawnPlayer: (player: Player) => void;
 }

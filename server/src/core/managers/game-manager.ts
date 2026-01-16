@@ -36,7 +36,7 @@ export class GameManager {
     let tank = this.findTankByPlayer(player.id);
 
     if (!tank) {
-      tank = new StarterTank(uuid(), player.id);
+      tank = new StarterTank(uuid(), player.id, player.name);
       this.physicsManager.add(tank);
     }
   }

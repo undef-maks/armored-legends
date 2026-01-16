@@ -13,12 +13,19 @@ export class NetworkManager {
     for (const playerTank of tanks) {
       const state: GameUpdateResponse = {
         tanks: [],
-        myTank: playerTank.getNetworkState(true) as TankNetworkStateFull
+        myTank: playerTank.getNetworkState(true) as TankNetworkStateFull,
+        projectiles: []
       };
 
       for (const mapTank of tanks) {
         if (mapTank.id === playerTank.id) continue;
         state.tanks.push(mapTank.getNetworkState(false));
+      }
+
+      for (const mapObject of objects) {
+        if (mapObject.type == "projectile") {
+          state.projectiles.push(mapObject.getNetworkState(false));
+        }
       }
 
       response.push({ playerId: playerTank.playerId, state });

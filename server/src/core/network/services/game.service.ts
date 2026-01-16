@@ -3,9 +3,12 @@ import PlayerManager from "src/core/managers/player-manager";
 import { Socket } from "socket.io";
 import { IGameService } from "./service";
 import { Player } from "src/core/player";
-import { MoveInput } from "@shared/events/game.events";
+import { MoveInput, UseSpell } from "@shared/events/game.events";
 import { LightWeaponComponent } from "src/objects/tank/components";
 import { v4 as uuid } from "uuid";
+import { SpawnProjectileCommand } from "src/objects/projectiles/commands/spawn-projectile.command";
+import { Projectile } from "src/objects/projectiles/projectile";
+import { Vec3 } from "cannon-es";
 
 export class GameService implements IGameService {
   constructor(
@@ -38,24 +41,15 @@ export class GameService implements IGameService {
     tank.setComponent(new LightWeaponComponent(uuid()));
   }
 
-  spawnPlayer: (player: Player) => void;
+  useSpell(player: Player, data: UseSpell) {
+    const tank = this.gameManager.findTankByPlayer(player.id);
+    if (!tank) return;
 
-  // spawnPlayer: (player: Player) => void;
-  // spawnPlayer(player: Player) {
-  // this.gameManager.handlePlayerJoin(player);
-  // }
-  //
-  // handlePlayerMove(player: Player, input: MoveInput) {
-  //   this.gameManager.updatePlayerInput(player.id, input);
-  // }
-  //
-  // handlePlayerShoot(player: Player, input: ShootInput) {
-  //   this.gameManager.playerShoot(player.id, input);
-  // }
+    if (data.type == "shoot") {
+      const command = new SpawnProjectileCommand("default", (obj: Projectile) => { this.gameManager.addObject(obj); });
+      command.execute(tank);
+    }
+  }
 
-  // Викликається GameManager кожен network-tick
-  // sendStateToPlayer(playerId: string, state: GameUpdateResponse) {
-  // this.gameController.sendState(playerId, state);
-  // }
 }
 

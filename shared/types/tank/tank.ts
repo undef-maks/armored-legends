@@ -29,6 +29,7 @@ export interface TankComponentsNetworkState {
 
 export interface TankNetworkState {
   type: "tank";
+  playerName: string;
   id: string;
   playerId: string;
   position: Vec3;
@@ -36,7 +37,7 @@ export interface TankNetworkState {
   components: TankComponentsNetworkState;
 }
 
-export interface TankNetworkStateFull {
+export interface TankNetworkStateFull extends TankNetworkState {
   type: "tank";
   id: string;
   playerId: string;
