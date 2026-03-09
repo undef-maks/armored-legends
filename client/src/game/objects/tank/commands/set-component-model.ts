@@ -1,7 +1,6 @@
 import { TankComponentCategory } from "@shared/types/tank/components/types";
 import { TankComponent } from "../components/component";
 import { AssetManager } from "@core/asset-manager";
-import { TracksComponent } from "../components/tracks/tracks.component";
 import { ShadowGenerator, TransformNode } from "@babylonjs/core";
 
 const MODEL_FOLDERS: Record<TankComponentCategory, string> = {

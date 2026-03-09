@@ -9,5 +9,5 @@ export interface IProjectile {
 
 export interface ProjectileNetworkState extends IProjectile {
   position: Vec3;
-  quaternation: Vec3Q;
+  quaternion: Vec3Q;
 }

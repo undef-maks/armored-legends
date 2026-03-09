@@ -1,2 +1,1 @@
-spawn projectile command takes tank and from weapon position angle makes direction with stats
 

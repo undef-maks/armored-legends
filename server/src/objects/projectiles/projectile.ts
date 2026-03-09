@@ -28,7 +28,7 @@ export class Projectile extends GameObject {
       category: this.category,
       id: this.id,
       position: this.body.position,
-      quaternation: this.body.quaternion
+      quaternion: this.body.quaternion
     }
   }
 }

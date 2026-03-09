@@ -1,4 +1,3 @@
-import { GameObjectNetworkState } from "@shared/types/game-objects";
 import { GameObject } from "../game-object";
 import { Quaternion, TransformNode, Vector3 } from "@babylonjs/core";
 import { AssetManager } from "@core/asset-manager";
@@ -32,12 +31,24 @@ export class ProjectileObject extends GameObject {
   update(dt: number): void {
     if (!this.rootNode) return;
     if (this.netPos == null) return;
+    const { rootNode, netPos } = this;
 
     Vector3.LerpToRef(
-      this.rootNode.position,
-      this.netPos.position,
+      rootNode.position,
+      netPos.position,
       0.1,
-      this.rootNode.position
+      rootNode.position
+    );
+
+    if (!rootNode.rotationQuaternion)
+      rootNode.rotationQuaternion = new Quaternion();
+
+
+    Quaternion.SlerpToRef(
+      rootNode.rotationQuaternion!,
+      netPos.quaternion,
+      1,
+      rootNode.rotationQuaternion!
     );
   }
 
@@ -49,9 +60,9 @@ export class ProjectileObject extends GameObject {
       };
     }
 
-    const { position } = state;
+    const { position, quaternion } = state;
     this.netPos.position.set(position.x, position.y, position.z);
-    // this.netPos.quaternion.set(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+    this.netPos.quaternion.set(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
 
   }
 }

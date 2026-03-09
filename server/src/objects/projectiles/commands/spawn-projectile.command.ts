@@ -10,10 +10,19 @@ export class SpawnProjectileCommand {
   execute(tank: Tank) {
     const { pos, dir } = this.getSpawnPosition(tank);
     const angle = tank.components.weapon.angle;
+    let projectile = null;
 
-    const projectile = new BulletProjectile(uuid(), pos, dir, angle);
+    switch (tank.components.weapon.type) {
+      case "light-weapon":
+        projectile = new BulletProjectile(uuid(), pos, dir, angle);
+        break;
+      case "flame-weapon":
+        projectile = new DefaultProjectile(uuid(), pos, dir, angle);
+        break;
+    }
 
-    this.cb(projectile);
+    if (projectile)
+      this.cb(projectile);
   }
 
   private getSpawnPosition(tank: Tank) {

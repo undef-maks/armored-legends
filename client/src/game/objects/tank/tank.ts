@@ -1,10 +1,9 @@
 import { GameObject } from "../game-object";
-import { TankNetworkState, TankNetworkStateFull } from "@shared/types/tank/tank";
+import { TankNetworkState } from "@shared/types/tank/tank";
 import * as BABYLON from "@babylonjs/core";
 import { WeaponComponent } from "./components/weapons/weapon.component";
 import { TankBodyComponent } from "./components/bodies/tank-body.component";
 import { TracksComponent } from "./components/tracks/tracks.component";
-import { Vec3, Vec3Q } from "@shared/types/position";
 
 export function lerp(start: number, end: number, t: number): number {
   return start + (end - start) * t;

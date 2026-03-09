@@ -7,7 +7,6 @@ import { TankUpdater } from "./updaters/tank-updater";
 import { GameClient } from "../../network/game-client";
 import GameManager from "./game.manager";
 import { SceneManager } from "./scene.manager";
-import { SmallStone } from "@game/objects/decorations/small-stone";
 import { GameObject } from "@game/objects/game-object";
 import { ProjectileUpdater } from "./updaters/projectile-updater";
 import { DefaultProjectile } from "@game/objects/projectiles/default-projectile";
