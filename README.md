@@ -17,6 +17,3 @@ npm install
 npm run dev
 ```
 
-
-Todo
-1. Weapon movement
