@@ -1,7 +1,16 @@
 import { Vec3, Vec3Q } from "../position";
-import { BodyComponentFullNetworkState, BodyComponentNetworkState } from "./components/body-component";
-import { TracksComponentFullNetworkState, TracksComponentNetworkState } from "./components/tracks-component";
-import { WeaponComponentFullNetworkState, WeaponComponentNetworkState } from "./components/weapon-component";
+import {
+  BodyComponentFullNetworkState,
+  BodyComponentNetworkState,
+} from "./components/body-component";
+import {
+  TracksComponentFullNetworkState,
+  TracksComponentNetworkState,
+} from "./components/tracks-component";
+import {
+  WeaponComponentFullNetworkState,
+  WeaponComponentNetworkState,
+} from "./components/weapon-component";
 
 export interface ITank {
   readonly id: string;
@@ -9,7 +18,6 @@ export interface ITank {
   type: string;
   getNetworkState: (full: boolean) => TankNetworkStateFull | TankNetworkState;
 }
-
 
 export interface TankComponentsNetworkStateFull {
   body: BodyComponentFullNetworkState;
@@ -45,4 +53,3 @@ export interface TankNetworkStateFull extends TankNetworkState {
   quaternion: Vec3Q;
   components: TankComponentsNetworkStateFull;
 }
-

@@ -1,38 +1,63 @@
-import { TankComponentsNetworkState, TankComponentsNetworkStateFull } from "@shared/types/tank/tank";
-import { Tank } from "../tank";
-import { BodyComponentType, TracksComponentType, WeaponComponentType } from "@shared/types/tank/components/types";
 import {
-  LightBodyComponent, HeavyBodyComponent
-} from "../components/bodies";
-import { ArmoredTracksComponent, MediumTracksComponent } from "../components/tracks";
+  TankComponentsNetworkState,
+  TankComponentsNetworkStateFull,
+} from "@shared/types/tank/tank";
+import { Tank } from "../tank";
+import {
+  BodyComponentType,
+  TracksComponentType,
+  WeaponComponentType,
+} from "@shared/types/tank/components/types";
+import { LightBodyComponent, HeavyBodyComponent } from "../components/bodies";
+import {
+  ArmoredTracksComponent,
+  MediumTracksComponent,
+} from "../components/tracks";
 import { TracksComponent } from "../components/tracks/tracks.component";
 import { WeaponComponent } from "../components/weapons/weapon.component";
-import { FlameWeaponComponent, HeavyWeaponComponent, LightWeaponComponent, MediumWeaponComponent } from "../components/weapons";
+import {
+  FlameWeaponComponent,
+  HeavyWeaponComponent,
+  LightWeaponComponent,
+  MediumWeaponComponent,
+} from "../components/weapons";
 import { TankBodyComponent } from "../components/bodies/tank-body.component";
 import { SetComponentModel } from "./set-component-model";
 import { ShadowGenerator } from "@babylonjs/core";
 
-const TRACKS_FACTORY: Record<TracksComponentType, (id: string) => TracksComponent> = {
+const TRACKS_FACTORY: Record<
+  TracksComponentType,
+  (id: string) => TracksComponent
+> = {
   "medium-tracks": (id: string) => new MediumTracksComponent(id),
-  "armored-tracks": (id: string) => new ArmoredTracksComponent(id)
+  "armored-tracks": (id: string) => new ArmoredTracksComponent(id),
 };
 
-const WEAPON_FACTORY: Record<WeaponComponentType, (id: string) => WeaponComponent> = {
+const WEAPON_FACTORY: Record<
+  WeaponComponentType,
+  (id: string) => WeaponComponent
+> = {
   "medium-weapon": (id: string) => new MediumWeaponComponent(id),
   "light-weapon": (id: string) => new LightWeaponComponent(id),
   "flame-weapon": (id: string) => new FlameWeaponComponent(id),
   "heavy-weapon": (id: string) => new HeavyWeaponComponent(id),
 };
 
-const BODY_FACTORY: Record<BodyComponentType, (id: string) => TankBodyComponent> = {
+const BODY_FACTORY: Record<
+  BodyComponentType,
+  (id: string) => TankBodyComponent
+> = {
   "heavy-body": (id: string) => new HeavyBodyComponent(id),
   "light-body": (id: string) => new LightBodyComponent(id),
 };
 
 export class SetComponentsCommand {
-  constructor(private components: TankComponentsNetworkStateFull | TankComponentsNetworkState, private shadowGenerator: ShadowGenerator) {
-
-  }
+  constructor(
+    private components:
+      | TankComponentsNetworkStateFull
+      | TankComponentsNetworkState,
+    private shadowGenerator: ShadowGenerator,
+  ) {}
 
   async execute(tank: Tank) {
     tank.updatedComponentsId = this.components.updatedId;
@@ -41,14 +66,20 @@ export class SetComponentsCommand {
 
     if (!tank.components.body || tank.components.body.id !== body.id) {
       tank.components.body = BODY_FACTORY[body.type](body.id);
-      const setModel = new SetComponentModel(tank.components.body.modelName, this.shadowGenerator);
+      const setModel = new SetComponentModel(
+        tank.components.body.modelName,
+        this.shadowGenerator,
+      );
       await setModel.execute(tank.components.body);
       tank.components.body.setParent(tank.tankRoot);
     }
 
     if (!tank.components.tracks || tank.components.tracks.id !== tracks.id) {
       tank.components.tracks = TRACKS_FACTORY[tracks.type](tracks.id);
-      const setModel = new SetComponentModel(tank.components.tracks.modelName, this.shadowGenerator);
+      const setModel = new SetComponentModel(
+        tank.components.tracks.modelName,
+        this.shadowGenerator,
+      );
       await setModel.execute(tank.components.tracks);
 
       if (tank.components.body.rootNode)
@@ -58,12 +89,14 @@ export class SetComponentsCommand {
     }
 
     if (!tank.components.weapon || tank.components.weapon.id !== weapons.id) {
-      if (tank.components.weapon)
-        tank.components.weapon.rootNode.dispose();
+      if (tank.components.weapon) tank.components.weapon.rootNode.dispose();
 
       tank.components.weapon = WEAPON_FACTORY[weapons.type](weapons.id);
 
-      const setModel = new SetComponentModel(tank.components.weapon.modelName, this.shadowGenerator);
+      const setModel = new SetComponentModel(
+        tank.components.weapon.modelName,
+        this.shadowGenerator,
+      );
       await setModel.execute(tank.components.weapon);
 
       if (tank.components.body.rootNode)
@@ -71,12 +104,11 @@ export class SetComponentsCommand {
 
       tank.components.weapon.changeOffsets(tank.components.body.offsets);
     }
-    console.log(this.components)
-
+    console.log(this.components);
   }
-  private setWeapon = (): void => { };
-  private setBody = (): void => { };
-  private setTracks = (): void => { }
+  private setWeapon = (): void => {};
+  private setBody = (): void => {};
+  private setTracks = (): void => {};
 
   // private async syncComponent<T>(
   //   tank: Tank, key: T, data: { id: string, type: any }, factory: Record<string, (id: string) => T>
@@ -94,9 +126,14 @@ export class SetComponentsCommand {
   // }
 }
 
-
-export function verifyComponents(tank: Tank, components: TankComponentsNetworkState): boolean {
-  if (!tank.components.tracks || tank.components.tracks.id !== components.tracks.id) {
+export function verifyComponents(
+  tank: Tank,
+  components: TankComponentsNetworkState,
+): boolean {
+  if (
+    !tank.components.tracks ||
+    tank.components.tracks.id !== components.tracks.id
+  ) {
     return false;
   }
 
@@ -104,10 +141,12 @@ export function verifyComponents(tank: Tank, components: TankComponentsNetworkSt
     return false;
   }
   //
-  if (!tank.components.weapon || tank.components.weapon.id !== components.weapons.id) {
+  if (
+    !tank.components.weapon ||
+    tank.components.weapon.id !== components.weapons.id
+  ) {
     return false;
   }
 
   return true;
 }
-

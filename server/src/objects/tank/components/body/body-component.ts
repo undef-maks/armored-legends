@@ -53,3 +53,4 @@ export class HeavyBodyComponent extends TankBodyComponent {
     super(id, "heavy-body", 20, 3, 500);
   }
 }
+

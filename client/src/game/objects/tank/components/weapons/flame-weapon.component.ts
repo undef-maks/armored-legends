@@ -6,7 +6,5 @@ export class FlameWeaponComponent extends WeaponComponent {
     super(id, "flame-weapon");
   }
 
-  update(dt: number): void {
-    // this.rootNode.rotation.y += 0.001;
-  }
+  update(dt: number): void {}
 }

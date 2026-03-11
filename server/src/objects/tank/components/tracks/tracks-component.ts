@@ -1,8 +1,15 @@
 import { TracksComponentType } from "@shared/types/tank/components/types";
-import { ITankTracksComponent, TracksComponentFullNetworkState, TracksComponentNetworkState } from "@shared/types/tank/components/tracks-component";
+import {
+  ITankTracksComponent,
+  TracksComponentFullNetworkState,
+  TracksComponentNetworkState,
+} from "@shared/types/tank/components/tracks-component";
 import { TankComponent } from "../tank-component";
 
-export class TracksComponent extends TankComponent implements ITankTracksComponent {
+export class TracksComponent
+  extends TankComponent
+  implements ITankTracksComponent
+{
   category: "tracks";
 
   constructor(
@@ -10,19 +17,21 @@ export class TracksComponent extends TankComponent implements ITankTracksCompone
     readonly type: TracksComponentType,
     public acceleration: number,
     public maxSpeed: number,
-    public turnSpeed: number
+    public turnSpeed: number,
   ) {
     super(id, type, "tracks");
   }
 
-  public getNetworkState(full: boolean): TracksComponentFullNetworkState | TracksComponentNetworkState {
+  public getNetworkState(
+    full: boolean,
+  ): TracksComponentFullNetworkState | TracksComponentNetworkState {
     const fullState: TracksComponentFullNetworkState = {
       id: this.id,
       type: this.type,
       category: this.category,
       acceleration: this.acceleration,
       maxSpeed: this.maxSpeed,
-      turnSpeed: this.turnSpeed
+      turnSpeed: this.turnSpeed,
     };
 
     if (full) return fullState;
@@ -31,9 +40,7 @@ export class TracksComponent extends TankComponent implements ITankTracksCompone
     return partial;
   }
 
-  getStats() {
-
-  }
+  getStats() {}
 }
 
 export class MediumTracksComponent extends TracksComponent {

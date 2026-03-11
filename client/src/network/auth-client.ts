@@ -1,12 +1,12 @@
 import { AuthError, AuthRegisterResponse } from "@shared/events/auth-events";
 import { io, Socket } from "socket.io-client";
 
-const SERVER_URL = "http://localhost:3000";
-
+//const SERVER_URL = "http://localhost:3000";
+const SERVER_URL = "http://35.234.157.245:3000";
 export class AuthClient {
   private socket: Socket | null = null;
 
-  tryAuthWithToken(token: string): Promise<{ success: boolean; }> {
+  tryAuthWithToken(token: string): Promise<{ success: boolean }> {
     return new Promise((resolve) => {
       this.socket = io(`${SERVER_URL}/auth`);
       const { socket } = this;
@@ -20,28 +20,33 @@ export class AuthClient {
       });
 
       this.socket.once("error", (data: AuthError) => {
-        if (data.type == "FAILED_AUTH")
-          resolve({ success: false });
+        if (data.type == "FAILED_AUTH") resolve({ success: false });
         else {
           console.warn("Unknown error", data);
-          resolve({ success: false })
+          resolve({ success: false });
         }
-      })
+      });
     });
   }
 
-  registerName(name: string): Promise<{ success: boolean, token?: string }> {
+  registerName(name: string): Promise<{ success: boolean; token?: string }> {
     return new Promise((resolve) => {
-      this.socket = io(`${SERVER_URL}/auth`);
+      this.socket = io(`${SERVER_URL}/auth`, {
+        transports: ["websocket", "polling"],
+        reconnection: true,
+      });
+
+      console.log("Connection...");
       const { socket } = this;
 
       this.socket.on("connect", () => {
+        console.log("Connected.");
         socket.emit("register", { name });
       });
 
       this.socket.on("register", (data: AuthRegisterResponse) => {
         resolve({ success: true, token: data.token });
-      })
+      });
 
       this.socket.once("error", (data: AuthError) => {
         resolve({ success: false });
@@ -49,4 +54,3 @@ export class AuthClient {
     });
   }
 }
-

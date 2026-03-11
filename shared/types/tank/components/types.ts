@@ -9,13 +9,8 @@ export type WeaponComponentType =
   | "light-weapon"
   | "flame-weapon";
 
-export type TracksComponentType =
-  | "medium-tracks"
-  | "armored-tracks"
+export type TracksComponentType = "medium-tracks" | "armored-tracks";
 
-export type BodyComponentType =
-  | "light-body"
-  | "heavy-body"
+export type BodyComponentType = "light-body" | "heavy-body";
 
 export type TankComponentCategory = "body" | "tracks" | "weapon";
-

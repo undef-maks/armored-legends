@@ -10,10 +10,9 @@ export class AppBootstrap {
     const authFlow = new AuthFlow(screens, auth);
 
     const isAuthorized = await authFlow.start();
-    console.log(isAuthorized)
+    console.log(isAuthorized);
     if (isAuthorized) {
       GameLoader.load();
     }
   }
 }
-

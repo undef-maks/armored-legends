@@ -1,18 +1,22 @@
 import { io, Socket } from "socket.io-client";
-import { GameUpdateResponse, MoveInput, UseSpell } from "@shared/events/game.events";
+import {
+  GameUpdateResponse,
+  MoveInput,
+  UseSpell,
+} from "@shared/events/game.events";
 
+const SERVER_URL = "http://35.234.157.245:3000";
 export class GameClient {
   private socket: Socket | null = null;
   private update: ((data: GameUpdateResponse) => void) | null = null;
 
   build(token: string) {
-    this.socket = io("http://localhost:3000/game", {
-      auth: { token: token }
+    this.socket = io(`${SERVER_URL}/game`, {
+      auth: { token: token },
     });
 
     this.socket.on("update", (data: GameUpdateResponse) => {
-      if (this.update)
-        this.update(data);
+      if (this.update) this.update(data);
     });
   }
 
